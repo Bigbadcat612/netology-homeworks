@@ -4,7 +4,7 @@ from get_file_path import PWD
 import os
 
 print('Введите номер файла для анализа.\nДоступные файлы:\n')
-available_files = list(os.listdir(path='%s/sourcefiles' % PWD))
+available_files = os.listdir(path='%s/sourcefiles' % PWD)
 dict_input = {}
 for i in range(len(available_files)):
     dict_input[i + 1] = available_files[i]

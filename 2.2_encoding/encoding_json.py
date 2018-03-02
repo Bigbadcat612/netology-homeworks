@@ -5,7 +5,7 @@ import json
 import chardet
 
 print('Введите номер файла для анализа.\nДоступные файлы:\n')
-available_files = list(os.listdir(path='%s/json_files' % PWD))
+available_files = os.listdir(path='%s/json_files' % PWD)
 dict_input = {}
 for i in range(len(available_files)):
     dict_input[i + 1] = available_files[i]
