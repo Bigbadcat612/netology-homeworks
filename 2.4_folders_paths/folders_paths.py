@@ -1,4 +1,5 @@
 import os
+import re
 
 pwd = os.path.dirname(os.path.abspath(__file__))
 
@@ -24,10 +25,11 @@ current_folder = choose_folder()
 
 def choose_files(folder):
     print('Введите формат искомого файла без точки. Например "sql"')
-    format_filter = '.' + str(input()).lower()
-    working_files = os.listdir('{}/{}'.format(pwd, folder))
-    working_files = list(filter(lambda x: format_filter in x, working_files))
-    if working_files == []: return print('Ничего не найдено.')
+    format_filter = '.' + input().lower()
+    working_files = os.listdir(os.path.join(pwd, folder))
+    working_files = list(
+        filter(lambda x: x.endswith(format_filter), working_files))
+    if working_files == []: print('Ничего не найдено.')
 
     return working_files
 
@@ -40,12 +42,15 @@ def iterative_find(working_files):
     print('Искать слово целиком или учитывать все совпадения? Да/нет')
     whole_phrase = str(input()).lower()
 
+
     while True:
         print('Введите фрагмент для поиска:')
-        user_input = str(input())
+        user_input = input()
         del_indices = []
+
         for i in range(len(working_files)):
-            with open('{}/{}/{}'.format(pwd, current_folder, working_files[i]), 'r') as f:
+            with open(
+                    os.path.join(pwd, current_folder, working_files[i]),'r', encoding='utf-8') as f:
                 txt = f.read()
                 if register == 'нет':
                     txt = txt.lower()
@@ -54,7 +59,8 @@ def iterative_find(working_files):
                 if whole_phrase == 'да':
                     cleaned_txt = []
                     for word in txt.split():
-                        cleaned_txt.append(word.strip('.,!-*:;…?«»'))
+                        cleaned_word = re.findall(r'\b\S+\b', word)
+                        cleaned_txt.extend(cleaned_word)
                     txt = cleaned_txt
 
                 if user_input not in txt: del_indices.append(i)
@@ -66,8 +72,8 @@ def iterative_find(working_files):
         print('\n'.join(working_files))
         print('Всего файлов: {}'.format(len(working_files)))
 
+
     return
 
 
 print(iterative_find(choose_files(current_folder)))
-
