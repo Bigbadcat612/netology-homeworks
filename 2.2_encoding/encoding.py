@@ -32,9 +32,8 @@ def top_words(text):
     word_list = text.split()  #формируем список слов
     word_list_filtered = []  #в этот список будем добавлять которые соответствуют фильтру длины слова
     for i in range(len(word_list)):
-        if len(word_list[i]) <= length_filter: continue
-        word_list_filtered.append(word_list[i].strip().lower(
-        ))  #убираем лишние пробелы и приводим слова к нижнему регистру
+        if len(word_list[i]) >= length_filter:
+            word_list_filtered.append(word_list[i].strip().lower())  #убираем лишние пробелы и приводим слова к нижнему регистру
 
     del word_list  #теперь старый список можно удалить (вопрос: а надо ли?)
 
@@ -52,8 +51,8 @@ def top_words(text):
     print('\nТоп-{} слов в тексте:'.format(word_amount))
 
     i = 0
-    for pair in word_count:
-        print('{}: {}'.format(pair[0], pair[1]))
+    for word, count in word_count:
+        print('{}: {}'.format(word, count))
         i += 1
         if i == word_amount: break
 
