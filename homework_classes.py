@@ -74,7 +74,6 @@ class Goat(Mammal):
 class Sheep(Mammal):
     def __init__(self, animal_type, name, age, weight, meat_type, have_wool, vaccination):
         super().__init__(animal_type, name, age, weight, meat_type, have_wool, vaccination)
-        self.have_wool = 1
         self.voice = 'бэээ'
 
     def shear():
@@ -116,7 +115,7 @@ pig_eldar = Pig('свинья', 'Эльдар', 2, 300, 'свинина', 0, 1)
 print(pig_eldar.voice)
 pig_eldar.get_description()
 
-sheep_dolly = Sheep('овца', 'Долли', 4, 100, 'баранина', 0, 0,)
+sheep_dolly = Sheep('овца', 'Долли', 4, 100, 'баранина', 0, 0)
 print(sheep_dolly.voice)
 sheep_dolly.get_description()
 
