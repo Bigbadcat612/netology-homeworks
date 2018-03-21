@@ -37,7 +37,7 @@ def get_common_friends(id_friends):
         params = dict(user_id=id, token=TOKEN, v=V)
         current_id = requests.get('https://api.vk.com/method/users.get', params)
         current_id = json.loads(current_id.text)
-        user_name = '{} {}'.format(current_id['response'][0]['first_name'], current_id['response'][0]['last_name'])
+        user_name = '{first_name} {last_name}'.format(**current_id['response'][0])
         common_friends[id] = user_name
 
     return common_friends
