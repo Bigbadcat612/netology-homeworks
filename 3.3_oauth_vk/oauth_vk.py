@@ -1,50 +1,39 @@
 import requests
 import json
 
-TOKEN = '7d84b19514bf4763e1fb6e4f2a2bdb1f2f23b6952ab4353ee57cd2a8ece4ad74bc7ab3d80980b2787a739'
-V = '5.73'
+TOKEN = '1ea6c7dfc081ffbec0a07a5cb6149cdab590ed2b437cfdda7300174d42c4ff46b353861bc3c8d54947701'
+V = '5.74'
 URL = 'vk.com/id'
+id1 = input('Введите первый id')
+id2 = input('Введите первый id')
 
 
-def get_friends_list(ids):
-    """Выводит список друзей заданых айди в виде словаря 'айди пользователя: список друзей'"""
-    friends_by_ids = {}
-    print('Подключаюсь к vk.com...\n')
+def get_mutual_friends(source_id, target_id):
+    params = dict(
+        source_uid = source_id,
+        target_uid = target_id,
+        access_token = TOKEN,
+        v = V
+    )
+
+    mutual_friends = requests.get('https://api.vk.com/method/friends.getMutual', params).json()
+    
+    return mutual_friends['response']
+
+
+def get_names(ids):
+    friends_with_names = {}
     for id in ids:
         params = dict(user_id=id, token=TOKEN, v=V)
-        current_id = requests.get('https://api.vk.com/method/friends.get', params)
-        current_id = json.loads(current_id.text)
-        friends_by_ids[id] = set(current_id['response']['items'])
-
-    return friends_by_ids
-
-
-def get_common_friends(id_friends):
-    """Создает множество общих друзей. Принимает значения в формате 'айди пользователя: список друзей'"""
-    friend_list = []
-    common_ids = set()
-    common_friends = dict()
-
-    for friends in id_friends.values():
-        friend_list.append(friends)
-
-    common_ids.update(friend_list[0])
-    for i in range(1, len(friend_list)):
-        common_ids = common_ids & friend_list[i]
-
-    print('Создаю список общих друзей...\n')
-    for id in common_ids:
-        params = dict(user_id=id, token=TOKEN, v=V)
-        current_id = requests.get('https://api.vk.com/method/users.get', params)
-        current_id = json.loads(current_id.text)
+        current_id = requests.get('https://api.vk.com/method/users.get', params).json()
         user_name = '{first_name} {last_name}'.format(**current_id['response'][0])
-        common_friends[id] = user_name
+        friends_with_names[id] = user_name
+        
+    return friends_with_names
 
-    return common_friends
 
+common_friends = get_names(get_mutual_friends(id1, id2))
 
-user_input = input('Введите айди пользователей через пробел. По окончанию нажмите Enter.\n').split()
-common_friends = get_common_friends(get_friends_list(user_input))
-
+print('Общие друзья для id{} и id{}:\n'.format(id1, id2))
 for id, name in common_friends.items():
     print('{}: {}'.format(name, ''.join((URL, str(id)))))
