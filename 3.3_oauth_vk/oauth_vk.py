@@ -4,8 +4,8 @@ import json
 TOKEN = '1ea6c7dfc081ffbec0a07a5cb6149cdab590ed2b437cfdda7300174d42c4ff46b353861bc3c8d54947701'
 V = '5.74'
 URL = 'vk.com/id'
-id1 = input('Введите первый id')
-id2 = input('Введите первый id')
+id1 = input('Введите первый id\n')
+id2 = input('Введите второй id\n')
 
 
 def get_mutual_friends(source_id, target_id):
